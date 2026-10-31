@@ -1,0 +1,56 @@
+CLI command output and health observations from upstream 445afc1.
+Router image v0.4.0; API-only, minimal standalone mode; host offset 1000.
+Temporary filesystem paths are redacted. Command results are unchanged.
+
+default-8080
+Command: vllm-sr config apply --config config.yaml --endpoint http://127.0.0.1:9080
+Exit code: 0
+
+STDOUT:
+{
+  "applied": false,
+  "message": "Restart required: run `vllm-sr serve` to apply.",
+  "plan": null,
+  "reason": "tracing configuration changed; the tracer provider is initialized at startup and cannot be activated by the Router hot-reload API; activate the candidate through the deployment workflow",
+  "saved": "<temporary test directory>/.vllm-sr/runtime-config.srp-85f152f7.yaml",
+  "status": "restart_required"
+}
+
+STDERR:
+Using container runtime from CONTAINER_RUNTIME: docker
+Replacing active runtime config <temporary test directory>/.vllm-sr/runtime-config.srp-85f152f7.yaml from
+  source config <temporary test directory>/config.yaml
+Restart required: run `vllm-sr serve` to apply. (tracing configuration changed; the tracer provider is initialized at startup and cannot be activated by the Router hot-reload API; activate the candidate through the deployment workflow)
+
+{
+  "case": "default-8080",
+  "endpoint": "http://127.0.0.1:9080",
+  "exit_code": 0,
+  "response_status": "restart_required",
+  "pending_file": true,
+  "pending_restart": true,
+  "health_before": 200,
+  "health_after": 200,
+  "same_running_container": true
+}
+
+custom-8081
+Command: vllm-sr config apply --config config.yaml --endpoint http://127.0.0.1:9081
+Exit code: 1
+
+STDOUT:
+
+STDERR:
+Error: Restart required: tracing configuration changed; the tracer provider is initialized at startup and cannot be activated by the Router hot-reload API; activate the candidate through the deployment workflow. The running Router can't take this change; restart it with the new configuration (on Kubernetes, roll it out with `helm upgrade`).
+
+{
+  "case": "custom-8081",
+  "endpoint": "http://127.0.0.1:9081",
+  "exit_code": 1,
+  "response_status": null,
+  "pending_file": false,
+  "pending_restart": false,
+  "health_before": 200,
+  "health_after": 200,
+  "same_running_container": true
+}
